@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios"
 const Pinata_API_Key = process.env.REACT_APP_PINATA_API_KEY;
 const pinata_SecretAPI_Key = process.env.REACT_APP_PINATA_API_SECRET;
 
@@ -68,11 +68,41 @@ const AddBook = ({ Add_Book }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!title || !author || !pinata_CID || !avail_copies) return;
+
+  //   Add_Book(title, author, pinata_CID, avail_copies);
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !author || !pinata_CID || !avail_copies) return;
 
-    Add_Book(title, author, pinata_CID, avail_copies);
+    try {
+      // Call the API function to add the book
+      await Add_Book(title, author, pinata_CID, avail_copies);
+
+      // Fetch the updated book list after adding the book
+     // await updateBookList();
+     const response = await axios.post("http://localhost:3004/books", {
+        title,
+        author,
+        pinata_CID,
+        avail_copies,
+    });
+    console.log(response);
+    if (!response.ok) {
+      throw new Error("Failed to add book");
+    }
+      // Clear the form fields after successful submission
+      set_title("");
+      set_author("");
+      set_available_copies("");
+      set_pinata_CID("");
+    } catch (error) {
+      console.error("Error adding book:", error);
+    }
   };
 
   return (
@@ -115,6 +145,7 @@ const AddBook = ({ Add_Book }) => {
       <button type="button" onClick={handleSubmit} className="button">
         Add Book
       </button>
+      
     </div>
   );
 };
