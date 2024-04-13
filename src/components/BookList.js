@@ -21,6 +21,20 @@ const BookList = ({ borrow_this_book, Borrowed_Book_List }) => {
     }
   };
 
+  const OpenBook = async () => {
+    try {
+      const response = await fetch("http://localhost:3004/books");
+      if (!response.ok) {
+        throw new Error("Failed to fetch books");
+      }
+      const booksData = await response.json();
+      console.log("books Fetched");
+      // Update the books state with fetched data
+      setBooks(booksData);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
   // The function that handles borrowing a book and updating the reading list
   const handle_borrowed_books = async (Book_ID) => {
     try {
@@ -43,6 +57,7 @@ const BookList = ({ borrow_this_book, Borrowed_Book_List }) => {
   return (
     <div className="books">
       <h2> Book List</h2>
+      <button onClick={OpenBook}>Fetch New Books</button> {/* Button to fetch new books */}
       <table>
         <thead>
           <tr>
@@ -57,8 +72,8 @@ const BookList = ({ borrow_this_book, Borrowed_Book_List }) => {
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>
-                <button onClick={() => fetchBooks()}>
-                  Borrow Book
+                <button onClick={() => window.open(`https://gateway.pinata.cloud/ipfs/${book.pinata_CID}`, "_blank")}>
+                  Open PDF
                 </button>
               </td>
             </tr>

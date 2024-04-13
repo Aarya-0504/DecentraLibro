@@ -5,7 +5,7 @@ const Welcome = ({ Connect_to_Wallet, Current_Account }) => {
     <div>
       <div>
         <h1 className="text-gradient">
-          Explore the Treasure Trove <br/> of Borrowed Books
+          Explore the Treasure Trove <br/> of Books
         </h1>
         <p className="text-gradient ">
           Uncover The Decentralized Community of Book Lovers
